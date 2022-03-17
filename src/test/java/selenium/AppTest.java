@@ -1,11 +1,11 @@
 package selenium;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.junit.Test;
 import org.junit.Before;
@@ -23,20 +23,32 @@ public class AppTest
         System.out.println("Iniciando configuración...");
         System.setProperty("webdriver.chrome.driver","drivers/chromedriver");
         driver = new ChromeDriver();
-        driver.get("https://www.amazon.com");
         driver.manage().window().maximize();
         System.out.println(driver.getCurrentUrl());
         System.out.println(driver.getTitle());
-        driver.navigate().to("https://www.google.com");
     }
 
     @Test
-    public void shouldAnswerWithTrue()
+    public void busquedaHandBookTest()
     {
-        System.out.println("Iniciando Pruebas...");
-        WebElement searchbox = driver.findElement(By.name("q"));
-        searchbox.sendKeys("HandBook Devops");
-        searchbox.submit();
-        assertEquals("HandBook Devops", driver.getTitle());
+        driver.get("https://www.google.com/");
+        driver.manage().window().setSize(new Dimension(720, 691));
+        driver.findElement(By.name("q")).click();
+        driver.findElement(By.name("q")).sendKeys("handbook devops");
+        driver.findElement(By.name("btnK")).click();
+        driver.findElement(By.xpath("//div[@id=\'rso\']/div/div/div/div/div/div[2]/div/a/g-img/div")).click();
+        assertTrue(driver.getTitle().contains("The DevOps Handbook"));
+    }
+
+    @Test
+    public void busquedaPhoenixTest()
+    {
+        driver.get("https://www.amazon.com/");
+        driver.manage().window().setSize(new Dimension(720, 692));
+        driver.findElement(By.id("twotabsearchtextbox")).click();
+        driver.findElement(By.id("twotabsearchtextbox")).sendKeys("the phoenix project");
+        driver.findElement(By.id("twotabsearchtextbox")).sendKeys(Keys.ENTER);
+        String bodyText = driver.findElement(By.tagName("body")).getText();
+        assertTrue(bodyText.contains("The Phoenix Project: A Novel about IT"));
     }
 }
